@@ -6,8 +6,9 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import React, {Component, PureComponent} from 'react';
+import {Platform, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import PropsTest from './PropsTest'
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -17,6 +18,8 @@ const instructions = Platform.select({
 });
 
 type Props = {};
+
+
 export default class App extends Component<Props> {
 
     constructor(props) {
@@ -25,46 +28,43 @@ export default class App extends Component<Props> {
         console.log("0 constructor")
     }
 
-    componentWillMount(){
-        console.log("1 componentWillMount")
+
+    onClickSon = (msgFromSon)=>{
+        console.log(msgFromSon)
     }
 
-    componentDidMount(){
-        console.log("2 componentDidMount")
-    }
+    // render(){
+    //     return <Son onClickSon={this.onClickSon}/>
+    // }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        console.log("3 componentDidMount")
-        return true
-    }
-
-    componentWillReceiveProps(nextProps) {
-        console.log("4 componentWillReceiveProps")
-    }
-
-    componentWillUnmount() {
-        console.log("5 componentWillUnmount")
-    }
-
-    componentWillUpdate(){
-        console.log("6 componentWillUpdate")
-    }
-
-    componentDidUpdate() {
-        console.log("7 componentDidUpdate")
+    render(){
+        return <PropsTest name="yxc" age={18} sex="man"/>
     }
 
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.welcome}>Welcome to React Native!</Text>
-                <Text style={styles.instructions}>To get started, edit App.js</Text>
-                <Text style={styles.instructions}>{instructions}</Text>
-            </View>
-        );
-    }
+    // render() {
+    //     return (
+    //         <View style={styles.container}>
+    //             <Text style={styles.welcome}>Welcome to React Native!</Text>
+    //             <Text style={styles.instructions}>To get started, edit App.js</Text>
+    //             <Text style={styles.instructions}>{instructions}</Text>
+    //         </View>
+    //     );
+    // }
 
+
+}
+
+
+class Son extends PureComponent{
+
+    render(){
+        return <View>
+            <TouchableOpacity onPress={()=> this.props.onClickSon("我是子组件")}>
+                <Text>Divad</Text>
+            </TouchableOpacity>
+        </View>
+    }
 
 }
 
