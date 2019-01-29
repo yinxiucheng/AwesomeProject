@@ -9,6 +9,8 @@
 import React, {Component, PureComponent} from 'react';
 import {Platform, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import PropsTest from './PropsTest'
+import RefTest from './RefTest'
+import PizzaTranslator from './PizzaTranslator'
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -37,10 +39,26 @@ export default class App extends Component<Props> {
     //     return <Son onClickSon={this.onClickSon}/>
     // }
 
-    render(){
-        return <PropsTest name="yxc" age={18} sex="man"/>
-    }
+    // render(){
+    //     return <PropsTest name="yxc" age={18} sex="man"/>
+    // }
 
+
+    render(){
+        return (
+            <View>
+                <Text style={{fontSize:20}} onPress={()=>{
+                    var size=this.refs.refTest.getSize()
+                    this.setState()
+                }}>
+
+                </Text>
+
+                <RefTest ref="refTest"/>
+
+            </View>
+        )
+    }
 
     // render() {
     //     return (
@@ -51,6 +69,8 @@ export default class App extends Component<Props> {
     //         </View>
     //     );
     // }
+
+
 
 
 }

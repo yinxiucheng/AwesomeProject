@@ -1,5 +1,7 @@
+
 import React, {Component, PureComponent} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
+
 import PropTypes from 'prop-types'
 
 
