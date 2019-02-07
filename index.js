@@ -6,4 +6,4 @@ import {name as appName} from './app.json';
 import Prarents from "./Prarents";
 import PizzaTranslator from './PizzaTranslator'
 
-AppRegistry.registerComponent(appName, () => PizzaTranslator );
+AppRegistry.registerComponent(appName, () => App );
