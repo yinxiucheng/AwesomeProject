@@ -10,10 +10,31 @@ import React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { createStackNavigator, createAppContainer, createBottomTabNavigator } from "react-navigation";
 
+
+
 class HomeScreen extends React.Component {
-    static navigationOptions = ({ navigation }) => {
-        header: () => null //隐藏头部
+    static navigationOptions = {
+        headerTitle: "Home",
+        headerRight: (
+            <Button
+                onPress={() => alert('This is a button!')}
+                title="Info"
+                color="#fff"
+            />
+        ),
+    };
+
+    componentDidMount() {
+        this.props.navigation.setParams({ increaseCount: this._increaseCount });
     }
+
+    state = {
+        count: 0,
+    };
+
+    _increaseCount = () => {
+        this.setState({ count: this.state.count + 1 });
+    };
 
     render() {
         return (
