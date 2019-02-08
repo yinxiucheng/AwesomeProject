@@ -1,20 +1,21 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React from 'react';
+import { Button, Image, View, Text } from 'react-native';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
-import React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
-import { createStackNavigator, createAppContainer, createBottomTabNavigator } from "react-navigation";
-
-
+class LogoTitle extends React.Component {
+    render() {
+        return (
+            <Image
+                source={require('./image/spiro.png')}
+                style={{ width: 30, height: 30 }}
+            />
+        );
+    }
+}
 
 class HomeScreen extends React.Component {
     static navigationOptions = {
-        headerTitle: "Home",
+        headerTitle: <LogoTitle />,
         headerRight: (
             <Button
                 onPress={() => alert('This is a button!')}
@@ -22,18 +23,6 @@ class HomeScreen extends React.Component {
                 color="#fff"
             />
         ),
-    };
-
-    componentDidMount() {
-        this.props.navigation.setParams({ increaseCount: this._increaseCount });
-    }
-
-    state = {
-        count: 0,
-    };
-
-    _increaseCount = () => {
-        this.setState({ count: this.state.count + 1 });
     };
 
     render() {
@@ -46,7 +35,7 @@ class HomeScreen extends React.Component {
                         /* 1. Navigate to the Details route with params */
                         this.props.navigation.navigate('Details', {
                             itemId: 86,
-                            otherParam: 'anything you want here',
+                            otherParam: 'First Details',
                         });
                     }}
                 />
@@ -56,17 +45,24 @@ class HomeScreen extends React.Component {
 }
 
 class DetailsScreen extends React.Component {
+    static navigationOptions = ({ navigation, navigationOptions }) => {
+        const { params } = navigation.state;
 
-    static navigationOptions = {
-        title: "Details"
-    }
-
+        return {
+            title: params ? params.otherParam : 'A Nested Details Screen',
+            /* These values are used instead of the shared configuration! */
+            headerStyle: {
+                backgroundColor: navigationOptions.headerTintColor,
+            },
+            headerTintColor: navigationOptions.headerStyle.backgroundColor,
+        };
+    };
 
     render() {
-        /* 2. Get the param, provide a fallback value if not available */
-        const { navigation } = this.props;
-        const itemId = navigation.getParam('itemId', 'NO-ID');
-        const otherParam = navigation.getParam('otherParam', 'some default value');
+        /* 2. Read the params from the navigation state */
+        const { params } = this.props.navigation.state;
+        const itemId = params ? params.itemId : null;
+        const otherParam = params ? params.otherParam : null;
 
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -74,15 +70,13 @@ class DetailsScreen extends React.Component {
                 <Text>itemId: {JSON.stringify(itemId)}</Text>
                 <Text>otherParam: {JSON.stringify(otherParam)}</Text>
                 <Button
-                    title="Go to Details... again"
+                    title="Update the title"
                     onPress={() =>
-                        this.props.navigation.push('Details', {
-                            itemId: Math.floor(Math.random() * 100),
-                        })}
+                        this.props.navigation.setParams({ otherParam: 'Updated!' })}
                 />
                 <Button
-                    title="Go to Home"
-                    onPress={() => this.props.navigation.navigate('Home')}
+                    title="Go to Details... again"
+                    onPress={() => this.props.navigation.navigate('Details')}
                 />
                 <Button
                     title="Go back"
@@ -93,70 +87,33 @@ class DetailsScreen extends React.Component {
     }
 }
 
-
-class SettingsScreen extends React.Component {
-    render() {
-        return (
-            <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                <Text>Setting Screen</Text>
-                <Button
-                    title="Go to ProfileScreen"
-                    onPress={() => this.props.navigation.navigate('Details')}
-                />
-            </View>
-        );
-    }
-}
-
-
-class ProfileScreen extends React.Component {
-    render() {
-        return (
-            <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                <Text>Details Screen</Text>
-
-                <Button style={styles.btn}
-                        title="Go to ProfileScreen...again"
-                        onPress={() => this.props.navigation.push('Details')}
-                />
-            </View>
-        );
-    }
-}
-
-const HomeStack = createStackNavigator({
-    Home: HomeScreen,
-    Details: DetailsScreen
-},{
-    initialRouteName:"Home"
-});
-
-const SettingsStack = createStackNavigator({
-    Settings: SettingsScreen,
-    Profile: ProfileScreen,
-});
-
-const TabNavigator = createBottomTabNavigator(
+const RootStack = createStackNavigator(
     {
-        Home: HomeStack,
-        Settings: SettingsStack,
+        Home: {
+            screen: HomeScreen,
+        },
+        Details: {
+            screen: DetailsScreen,
+        },
+    },
+    {
+        initialRouteName: 'Home',
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: '#f4511e',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontWeight: 'bold',
+            },
+        },
     }
 );
 
-
-const AppContainer = createAppContainer(TabNavigator);
+const AppContainer = createAppContainer(RootStack);
 
 export default class App extends React.Component {
     render() {
         return <AppContainer />;
     }
 }
-
-const styles = StyleSheet.create({
-    btn:{
-        marginTop:20,
-        margin:50
-    }
-})
-
-
