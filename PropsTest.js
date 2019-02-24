@@ -22,8 +22,7 @@ export default class PropsTest extends Component{
     }
 
 
-    render(){
-        return(<View>
+    render(){return(<View>
             <Text>姓名：{this.props.name}</Text>
             <Text>age: {this.props.age}</Text>
             <Text>sex: {this.props.sex}</Text>

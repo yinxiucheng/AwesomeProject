@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, Image, View, Text } from 'react-native';
-import { createStackNavigator, createAppContainer } from 'react-navigation'; // 1.0.0-beta.27
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 class LogoTitle extends React.Component {
     render() {
         return (
             <Image
-                source={require('./spiro.png')}
+                source={require('./image/spiro.png')}
                 style={{ width: 30, height: 30 }}
             />
         );
@@ -14,41 +14,21 @@ class LogoTitle extends React.Component {
 }
 
 class HomeScreen extends React.Component {
-    static navigationOptions = ({ navigation }) => {
-        const params = navigation.state.params || {};
-
-        return {
-            headerTitle: <LogoTitle />,
-            headerLeft: (
-                <Button
-                    onPress={() => navigation.navigate('MyModal')}
-                    title="Info"
-                    color="#fff"
-                />
-            ),
-            headerRight: (
-                <Button onPress={params.increaseCount} title="+1" color="#fff" />
-            ),
-        };
-    };
-
-    componentWillMount() {
-        this.props.navigation.setParams({ increaseCount: this._increaseCount });
-    }
-
-    state = {
-        count: 0,
-    };
-
-    _increaseCount = () => {
-        this.setState({ count: this.state.count + 1 });
+    static navigationOptions = {
+        headerTitle: <LogoTitle />,
+        headerRight: (
+            <Button
+                onPress={() => alert('This is a button!')}
+                title="Info"
+                color="#fff"
+            />
+        ),
     };
 
     render() {
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 <Text>Home Screen</Text>
-                <Text>Count: {this.state.count}</Text>
                 <Button
                     title="Go to Details"
                     onPress={() => {
@@ -96,7 +76,7 @@ class DetailsScreen extends React.Component {
                 />
                 <Button
                     title="Go to Details... again"
-                    onPress={() => this.props.navigation.push('Details')}
+                    onPress={() => this.props.navigation.navigate('Details')}
                 />
                 <Button
                     title="Go back"
@@ -107,21 +87,7 @@ class DetailsScreen extends React.Component {
     }
 }
 
-class ModalScreen extends React.Component {
-    render() {
-        return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ fontSize: 30 }}>This is a modal!</Text>
-                <Button
-                    onPress={() => this.props.navigation.goBack()}
-                    title="Dismiss"
-                />
-            </View>
-        );
-    }
-}
-
-const MainStack = createStackNavigator(
+const RootStack = createStackNavigator(
     {
         Home: {
             screen: HomeScreen,
@@ -141,21 +107,6 @@ const MainStack = createStackNavigator(
                 fontWeight: 'bold',
             },
         },
-    }
-);
-
-const RootStack = createStackNavigator(
-    {
-        Main: {
-            screen: MainStack,
-        },
-        MyModal: {
-            screen: ModalScreen,
-        },
-    },
-    {
-        mode: 'modal',
-        headerMode: 'none',
     }
 );
 
